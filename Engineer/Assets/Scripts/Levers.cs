@@ -64,6 +64,12 @@ namespace VRStandardAssets.Utils
             m_Renderer.material = m_NormalMaterial;
         }
 
+        private void HandleOut()
+        {
+            Debug.Log("Out Item");
+            m_Renderer.material = m_NormalMaterial;
+        }
+
         private void HandleClick()
         {
             Debug.Log("Click Item");
