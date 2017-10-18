@@ -38,8 +38,8 @@ public class InteractionScript : MonoBehaviour {
         {
             Rigidbody rb = joint.connectedBody.GetComponent<Rigidbody>();
             joint.connectedBody = null;
-            rb.velocity = controller.velocity;
-            rb.angularVelocity = controller.angularVelocity;
+            rb.velocity = controller.velocity * 3;
+            rb.angularVelocity = controller.angularVelocity * 3;
         }
 	}
 
