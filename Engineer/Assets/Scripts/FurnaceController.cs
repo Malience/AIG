@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FurnaceController : MonoBehaviour {
-    [SerializeField]
     public static FurnaceController furnace;
 
     [SerializeField] Light furnaceLight;
@@ -30,15 +29,18 @@ public class FurnaceController : MonoBehaviour {
     [SerializeField]
     float powerGen;
     [SerializeField]
-    float power;
+    public float power;
     [SerializeField]
     int coalBurning;
+
+    [SerializeField]
+    Vector3 coalSpawn;
 
     List<GameObject> coal = new List<GameObject>();
 
     // Use this for initialization
     void Start () {
-		
+        furnace = this;
 	}
 	
 	// Update is called once per frame
@@ -48,7 +50,7 @@ public class FurnaceController : MonoBehaviour {
             o.transform.localScale -= Vector3.one * scaleStep;
             if (o.transform.localScale.x < 0)
             {
-                o.transform.localPosition = Vector3.one * 0.3f;
+                o.transform.localPosition = coalSpawn;
                 o.transform.localScale = Vector3.one * initScale;
                 coal.Remove(o);
                 coalBurning--;
