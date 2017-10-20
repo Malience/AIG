@@ -9,14 +9,17 @@ public class InteractionScript : MonoBehaviour {
     private SteamVR_Controller.Device controller;
     private SteamVR_TrackedObject trackedController;
     private FixedJoint joint;
+    private SpringJoint leverJoint;
 
     [SerializeField]
     private GameObject obj;
+
 
     // Use this for initialization
     void Start () {
         trackedController = this.gameObject.GetComponent<SteamVR_TrackedObject>();
         joint = this.gameObject.GetComponent<FixedJoint>();
+        leverJoint = this.gameObject.GetComponent<SpringJoint>();
         controller = SteamVR_Controller.Input((int)trackedController.index);
     }
 	
@@ -30,22 +33,39 @@ public class InteractionScript : MonoBehaviour {
 
         if (controller.GetPressDown(trigger))
         {
-            if (obj != null) joint.connectedBody = obj.GetComponent<Rigidbody>();
+            if (obj != null)
+            {
+                if (obj.CompareTag("Interactable")) joint.connectedBody = obj.GetComponent<Rigidbody>();
+                else
+                {
+                    leverJoint.connectedBody = obj.GetComponent<Rigidbody>();
+                }
+            }
             else
+            {
                 joint.connectedBody = null;
+                leverJoint.connectedBody = null;
+            }
         }
-        else if (controller.GetPressUp(trigger))
+        else if (controller.GetPressUp(trigger) && (joint.connectedBody != null || leverJoint.connectedBody != null))
         {
-            Rigidbody rb = joint.connectedBody.GetComponent<Rigidbody>();
-            joint.connectedBody = null;
-            rb.velocity = controller.velocity * 3;
-            rb.angularVelocity = controller.angularVelocity * 3;
+            if (obj.CompareTag("Interactable"))
+            {
+                Rigidbody rb = joint.connectedBody.GetComponent<Rigidbody>();
+                joint.connectedBody = null;
+                rb.velocity = controller.velocity * 3;
+                rb.angularVelocity = controller.angularVelocity * 3;
+            } else
+            {
+                joint.connectedBody = null;
+                leverJoint.connectedBody = null;
+            }
         }
 	}
 
     void OnTriggerStay(Collider o)
     {
-        if (o.CompareTag("Interactable"))
+        if (o.CompareTag("Interactable") || o.CompareTag("Lever"))
         {
             obj = o.gameObject;
         }
@@ -53,6 +73,7 @@ public class InteractionScript : MonoBehaviour {
 
     void OnTriggerExit(Collider o)
     {
+        if (joint.connectedBody != null || leverJoint.connectedBody != null) return;
         obj = null;
     }
 }

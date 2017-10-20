@@ -258,7 +258,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: dcb3bc8f0467c31478c54d49aad51564, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -485,7 +485,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 1930b8df6a3277f409a8aae24023f842, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -582,7 +582,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1339484239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,7 +595,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ui: {fileID: 1658619933}
-  power: 0
 --- !u!4 &1339484240
 Transform:
   m_ObjectHideFlags: 0
@@ -645,12 +644,20 @@ MonoBehaviour:
   maxPowerScale: {x: 0.25, y: 1.38}
   minElevatorColor: {r: 1, g: 0, b: 0, a: 1}
   maxElevatorColor: {r: 0, g: 1, b: 0, a: 1}
-  maxElevatorPower: 100
-  elevatorPower: 100
+  elevatorMax: 100
+  elevatorPower: 0
   blinkTimerMax: 8
   blinkColor: {r: 0.9862069, g: 1, b: 0, a: 1}
-  maxPower: 100000
-  power: 1000
+  powerMax: 100000
+  power: 0
+  powerStep: 0.1
+  powerLoss: 0.05
+  elevatorDrain: 80
+  elevatorCharge: 0.01
+  genMax: 100
+  powerGen: 0
+  coalBurning: 0
+  lever: 0
 --- !u!4 &1658619935
 Transform:
   m_ObjectHideFlags: 0
