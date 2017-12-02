@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VR;
+using UnityEngine.XR;
 
 public class VRToggle : MonoBehaviour {
 
@@ -9,13 +9,13 @@ public class VRToggle : MonoBehaviour {
     public float renderScale;
 	// Use this for initialization
 	void Start () {
-        VRSettings.enabled = VREnabled;
-        VRSettings.renderScale = renderScale;
-        
+        XRSettings.enabled = VREnabled;
+        //XRSettings.renderScale = renderScale;
+        XRSettings.eyeTextureResolutionScale = renderScale;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if(Input.GetKeyDown(KeyCode.V)) VRSettings.enabled = VREnabled = !VREnabled;
+        if(Input.GetKeyDown(KeyCode.V)) XRSettings.enabled = VREnabled = !VREnabled;
 	}
 }
