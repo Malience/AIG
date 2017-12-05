@@ -39,6 +39,15 @@ public class NetworkManager : MonoBehaviour {
     const byte LEVE = 0x3;
     const byte EVEL = 0x4;
     const byte SETU = 0x5;
+    public const byte TRAP = 0x6;
+    public const byte SPLT = 0x7;
+    public const byte SPWN = 0x8;
+    public const byte VICT = 0x9;
+    public const byte DEFE = 0x10;
+    public const byte NEXT = 0x11;
+    public const byte RESE = 0x12;
+    public const byte KILE = 0x13;
+    public const byte KILG = 0x14;
 
     float[] Unpack(byte[] buffer, int start)
     {
@@ -71,10 +80,11 @@ public class NetworkManager : MonoBehaviour {
                 break;
             case NetworkEventType.DataEvent:
                 byte code = buffer[0];
-                float[] n = Unpack(buffer, 1);
+                
                 switch (code)
                 {
                     case SYNC:
+                        float[] n = Unpack(buffer, 1);
                         UIScript.ui.power = n[0];
                         UIScript.ui.elevatorPower = n[1];
                         UIScript.ui.powerGen = n[2];
@@ -94,11 +104,42 @@ public class NetworkManager : MonoBehaviour {
                         UIScript.ui.lever = true;
                         break;
                     case SETU:
+                        n = Unpack(buffer, 1);
                         UIScript.ui.powerStep = n[0];
                         UIScript.ui.powerLoss = n[1];
                         UIScript.ui.elevatorDrain = n[2];
                         UIScript.ui.elevatorCharge = n[3];
                         UIScript.ui.genMax = n[4];
+                        break;
+                    case TRAP:
+                        Debug.Log("Recieved Trap: " + buffer[1] + ", " + buffer[2]);
+                        MazeController.mcont.lever[buffer[1]] = buffer[2] == 1;
+                        break;
+                    case SPLT:
+                        MazeController.mcont.SplitGroup(buffer[1], buffer[2], buffer[3]);
+                        break;
+                    case SPWN:
+                        byte[] ids = new byte[buffer[3]];
+                        for(byte i = 0; i < buffer[3]; i++)
+                        {
+                            ids[i] = buffer[4 + i];
+                        }
+                        MazeController.mcont.CreateGroup(buffer[1], buffer[2], ids);
+                        break;
+                    case VICT:
+                        break;
+                    case DEFE:
+                        break;
+                    case NEXT:
+                        int seed = BitConverter.ToInt32(buffer, 1);
+                        MazeController.mcont.MapGen(seed);
+                        break;
+                    case RESE:
+                        break;
+                    case KILE:
+                        MazeController.mcont.KillEnemy(buffer[1]);
+                        break;
+                    case KILG:
                         break;
                 }
                 

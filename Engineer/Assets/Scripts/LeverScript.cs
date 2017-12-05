@@ -14,7 +14,6 @@ public class LeverScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         hinge = gameObject.GetComponent<HingeJoint>();
-        Debug.Log(MID);
 	}
 	
 	// Update is called once per frame

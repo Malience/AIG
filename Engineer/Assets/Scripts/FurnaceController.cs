@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FurnaceController : MonoBehaviour {
     public static FurnaceController furnace;
+    public MazeController mcont;
 
     [SerializeField]
     int syncframe = 20;
@@ -34,7 +35,16 @@ public class FurnaceController : MonoBehaviour {
     public float elevatorPower;
 
     [SerializeField]
-    public LeverScript lever;
+    public float centerTrapDrain;
+    [SerializeField]
+    public float innerTrapDrain;
+    [SerializeField]
+    public float outerTrapDrain;
+
+    [SerializeField]
+    public LeverScript chargelever;
+    [SerializeField]
+    public LeverScript pushToClose;
 
     [SerializeField]
     public float genMax;
@@ -54,6 +64,12 @@ public class FurnaceController : MonoBehaviour {
     List<GameObject> coal = new List<GameObject>();
     List<GameObject> removal = new List<GameObject>();
 
+    public bool CanPowerTrap(int trap)
+    {
+        float needed = (trap == -1 ? centerTrapDrain : (trap < 2 ? innerTrapDrain : outerTrapDrain));
+        return needed < power;
+    }
+
     // Use this for initialization
     void Start () {
         furnace = this;
@@ -61,8 +77,14 @@ public class FurnaceController : MonoBehaviour {
 
     bool lastLever = false;
 
+    [SerializeField]
+    int maxfloor = 3;
+    [SerializeField]
+    int floor = 1;
+
 	// Update is called once per frame
 	void FixedUpdate () {
+        if (!mcont.started) return;
         foreach (GameObject o in coal)
         {
             o.transform.localScale -= Vector3.one * scaleStep;
@@ -88,23 +110,50 @@ public class FurnaceController : MonoBehaviour {
         else if (powerGen > genMax) powerGen = genMax;
         power += powerGen;
 
-        if (lever.active & power >= elevatorDrain & elevatorPower != elevatorMax)
+        if(pushToClose.active)
+        {
+            if(elevatorPower == elevatorMax)
+            {
+                if(floor >= maxfloor)
+                {
+                    Debug.Log("YOU WIN!!!!");
+                    NetworkManager.manager.SendByteCode(NetworkManager.VICT);
+                }
+                elevatorPower = 0;
+                mcont.resetMap();
+                int rand = Random.Range(0, 1000000000);
+                mcont.MapGen(rand);
+                mcont.nextwave = 15f;
+                mcont.powerbuilt += 1;
+                mcont.power += mcont.powerbuilt * 3;
+                mcont.wavetimers -= 1;
+                floor++;
+            }
+        }
+        else if (chargelever.active & power >= elevatorDrain & elevatorPower != elevatorMax)
         {
             power -= elevatorDrain;
             elevatorPower += elevatorCharge;
             if (elevatorPower > elevatorMax) elevatorPower = elevatorMax;
         }
 
-        if(lever.active & !lastLever)
+        if (mcont.doorlever.active)
+            power -= centerTrapDrain;
+        for (int i = 0; i < 5; i++)
+        {
+            if (mcont.traplever[i].active) power -= i < 2 ? innerTrapDrain : outerTrapDrain;
+        }
+
+        if(chargelever.active & !lastLever)
         {
             NetworkManager.manager.SendByteCode(NetworkManager.LEVE);
         }
 
-        if (!lever.active & lastLever)
+        if (!chargelever.active & lastLever)
         {
             NetworkManager.manager.SendByteCode(NetworkManager.EVEL);
         }
-        lastLever = lever.active;
+        lastLever = chargelever.active;
 
         if (power < 0) power = 0;
         else if (power > powerMax) power = powerMax;

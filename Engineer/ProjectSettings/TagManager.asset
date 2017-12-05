@@ -46,3 +46,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Maze
+    uniqueID: 3486030919
+    locked: 0
+  - name: Door
+    uniqueID: 3249560669
+    locked: 0
+  - name: Enemy
+    uniqueID: 3259875977
+    locked: 0
+  - name: Flame
+    uniqueID: 1405908089
+    locked: 0
