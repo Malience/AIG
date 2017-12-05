@@ -18,6 +18,15 @@ public class Maze : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        load();
+        
+    }
+
+    bool loaded = false;
+    public void load()
+    {
+        if (loaded) return;
+        loaded = true;
         //Center, the place all enemies are going to
         //nodes[0] = Reserved for the door
         //Center Corners
@@ -38,7 +47,7 @@ public class Maze : MonoBehaviour {
         nodes[19] = new NavCoord(0, 6, 19);
         nodes[20] = new NavCoord(6, 6, 20);
         //21-23 outer doors //17-23 total
-        
+
     }
 
     // Update is called once per frame
@@ -98,6 +107,8 @@ public class Maze : MonoBehaviour {
 
     public void MazeGen(int seed)
     {
+        load();
+
         for(int i = 1; i < 21; i++) //I KNOW, SUPER INEFFICIENT!
         {
             if (nodes[i] == null) continue;
