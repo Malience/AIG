@@ -76,6 +76,9 @@ public class MazeController : MonoBehaviour {
         if (group.casualties >= group.squad.Length) enemyTable.destroyGroup(enemy.group);
     }
 
+    [SerializeField]
+    float speed = 0.25f;
+
     // Use this for initialization
     void Start () {
         mcont = this;
@@ -97,6 +100,7 @@ public class MazeController : MonoBehaviour {
         for(int i = 0; i < maxGroups; i++)
         {
             group[i] = new Group();
+            group[i].speed = speed;
         }
 
         enemyTable = new EnemyArrayTable(maxEnemies, maxGroups);

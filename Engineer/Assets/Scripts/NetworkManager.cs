@@ -14,6 +14,9 @@ public class NetworkManager : MonoBehaviour {
     int port = 28888;
     byte error;
 
+    [SerializeField]
+    string host_address = "127.0.0.1";
+
     // Use this for initialization
     void Start () {
         manager = this;
@@ -25,7 +28,7 @@ public class NetworkManager : MonoBehaviour {
         udp = config.AddChannel(QosType.Unreliable);
 
         HostTopology topology = new HostTopology(config, 2);
-        hostID = NetworkTransport.AddHost(topology, port, null);
+        hostID = NetworkTransport.AddHost(topology, port, host_address);
 
         Debug.Log("Host ID: " + hostID);
     }

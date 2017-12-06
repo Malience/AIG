@@ -6,7 +6,7 @@ using UnityEngine;
 public class Group {
     public Enemy[] squad;
     [SerializeField]
-    float speed = 1;
+    public float speed = 0.25f;
 
     public int casualties;
 

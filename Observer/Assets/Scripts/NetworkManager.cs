@@ -147,9 +147,12 @@ public class NetworkManager : MonoBehaviour {
         }
     }
 
+    [SerializeField]
+    string server_address = "127.0.0.1";
+
     void Connect()
     {
-        connectionID = NetworkTransport.Connect(hostID, "127.0.0.1", serverPort, 0, out error);
+        connectionID = NetworkTransport.Connect(hostID, server_address, serverPort, 0, out error);
 
         if (error > 0) Debug.Log("Error: " + error);
     }

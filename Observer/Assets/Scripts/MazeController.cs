@@ -48,6 +48,9 @@ public class MazeController : MonoBehaviour {
         }
     }
 
+    [SerializeField]
+    float speed = 0.25f;
+
     // Use this for initialization
     void Start () {
         mcont = this;
@@ -69,6 +72,7 @@ public class MazeController : MonoBehaviour {
         for(int i = 0; i < maxGroups; i++)
         {
             group[i] = new Group();
+            group[i].speed = speed;
         }
 
         flame = new Flame[6];
@@ -251,7 +255,7 @@ public class MazeController : MonoBehaviour {
     void Update () {
         for(int i = 0; i < 6; i++)
         {
-            flame[i].parent.SetActive(lever[i]);
+            flame[i].parent.SetActive(lever[i] && UIScript.ui.CanPowerTrap(i));
         }
         if (printPath)
         {

@@ -66,14 +66,27 @@ public class UIScript : MonoBehaviour {
     [SerializeField]
     public bool lever;
 
+    [SerializeField]
+    public float centerTrapDrain;
+    [SerializeField]
+    public float innerTrapDrain;
+    [SerializeField]
+    public float outerTrapDrain;
+
 
     // Use this for initialization
     void Start () {
         ui = this;
 	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
+
+    public bool CanPowerTrap(int trap)
+    {
+        float needed = (trap == 0 ? centerTrapDrain : (trap < 3 ? innerTrapDrain : outerTrapDrain));
+        return needed < power;
+    }
+
+    // Update is called once per frame
+    void FixedUpdate () {
         powerGen += coalBurning * powerStep - powerLoss;
         if (powerGen < 0) powerGen = 0;
         else if (powerGen > genMax) powerGen = genMax;
@@ -89,7 +102,14 @@ public class UIScript : MonoBehaviour {
         if (power < 0) power = 0;
         else if (power > powerMax) power = powerMax;
 
+        MazeController mcont = MazeController.mcont;
 
+        if (mcont.lever[0])
+            power -= centerTrapDrain;
+        for (int i = 0; i < 5; i++)
+        {
+            if (mcont.lever[i]) power -= i < 3 ? innerTrapDrain : outerTrapDrain;
+        }
 
 
 
